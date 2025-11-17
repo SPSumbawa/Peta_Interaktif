@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Peta Interaktif Kantah Sumbawa</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Proj4js for coordinate transformation -->
+  <script src="https://cdn.jsdelivr.net/npm/proj4@2.9.0/dist/proj4.js"></script>
+  
+  <!-- Shapefile parser -->
+  <script src="https://unpkg.com/shpjs@4.0.4/dist/shp.js"></script>
+  
+  <!-- DXF parser -->
+  <script src="https://cdn.jsdelivr.net/npm/dxf@4.5.0/lib/dxf.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/splash.css">
+  <link rel="stylesheet" href="css/controls.css">
+  <link rel="stylesheet" href="css/popup.css">
+  <link rel="stylesheet" href="css/drawer.css">
+  <link rel="stylesheet" href="css/upload.css">
+</head>
+<body>
+  <!-- Loading Splash Screen -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="splash-decoration decoration-1"></div>
+    <div class="splash-decoration decoration-2"></div>
+    <div class="splash-decoration decoration-3"></div>
+    
+    <div class="splash-logo">
+      <div class="splash-icon">
+        <img src="img/logo-bpn.png" alt="Logo BPN" style="width: 300px; height: auto;">
+      </div>
+    </div>
+
+    <div class="splash-title">Peta Interaktif Survey Pemetaan</div>
+    <div class="splash-subtitle">Kantor Pertanahan Kabupaten Sumbawa</div>
+
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Memuat Data Peta...</div>
+    <div class="loading-progress" id="loading-progress">Mohon tunggu...</div>
+   
+    <div id="credit-map" class="credit-map">
+      © Dikembangkan oleh: Alip Pangestu
+    </div>
+  </div>
+
+  <!-- Modal Notifikasi Lokasi -->
+  <div id="location-modal" class="location-modal hidden">
+    <div class="location-modal-content">
+      <div class="location-modal-header">
+        <div class="location-modal-icon">📍</div>
+        <div class="location-modal-title">Izinkan Akses Lokasi</div>
+      </div>
+      <div class="location-modal-body">
+        Aplikasi memerlukan akses lokasi Anda untuk menampilkan posisi Anda di peta.
+      </div>
+      <div class="location-modal-buttons">
+        <button class="location-modal-btn secondary" id="btn-dismiss-location">Nanti Saja</button>
+        <button class="location-modal-btn primary" id="btn-request-location">Izinkan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Map Container -->
+  <div id="map"></div>
+
+  <!-- ✅ FLOATING UPLOAD TOGGLE BUTTON -->
+  <button id="upload-toggle-btn" class="upload-toggle-btn" onclick="UploadManager.togglePanel()" title="Upload File">
+    📁
+  </button>
+
+  <!-- ✅ UPLOAD PANEL (COLLAPSED BY DEFAULT) -->
+  <div id="upload-panel" class="upload-panel collapsed">
+    <div class="upload-header">
+      <div class="upload-header-title">
+        <span>📤</span>
+        <span>Upload Data</span>
+      </div>
+      <button class="upload-close-btn" onclick="UploadManager.togglePanel()" title="Tutup">
+        ✕
+      </button>
+    </div>
+    
+    <div class="upload-body">
+      <!-- Status Message -->
+      <div id="upload-status" class="upload-status" style="display: none;"></div>
+
+      <!-- Coordinate System Selector -->
+      <div class="coord-system">
+        <label class="coord-label">🌐 Sistem Koordinat</label>
+        <div class="coord-options">
+          <div id="coord-wgs84" class="coord-option active" onclick="UploadManager.selectCoordSystem('wgs84')">
+            <div class="coord-option-title">WGS84</div>
+            <div class="coord-option-desc">Lat/Lon</div>
+          </div>
+          <div id="coord-tm3-501" class="coord-option" onclick="UploadManager.selectCoordSystem('tm3-501')">
+            <div class="coord-option-title">TM3-501</div>
+            <div class="coord-option-desc">Zone 50.1</div>
+          </div>
+          <div id="coord-tm3-502" class="coord-option" onclick="UploadManager.selectCoordSystem('tm3-502')">
+            <div class="coord-option-title">TM3-502</div>
+            <div class="coord-option-desc">Zone 50.2</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Zone -->
+      <div id="upload-zone" class="upload-zone">
+        <div class="upload-icon">📁</div>
+        <p>Drag & Drop atau Klik untuk Upload</p>
+        <small>.zip (SHP), .dxf, .geojson<br>Max: 10 MB</small>
+      </div>
+
+      <!-- Uploaded Layers List -->
+      <div id="uploaded-layers" class="uploaded-layers" style="display: none;">
+        <div class="uploaded-layers-title">
+          <span>📄</span>
+          <span>Layer Terupload</span>
+        </div>
+        <div id="uploaded-layers-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ Drawer Overlay & Container -->
+  <div id="drawer-overlay" class="drawer-overlay" onclick="DrawerManager.close()"></div>
+  
+  <div id="bottom-drawer" class="bottom-drawer">
+    <!-- Handle untuk drag (mobile) -->
+    <div class="drawer-handle" onclick="DrawerManager.toggle()">
+      <div class="drawer-handle-bar"></div>
+    </div>
+
+    <!-- Header -->
+    <div class="drawer-header" id="drawer-header">
+      <div class="drawer-title" id="drawer-title">
+        📍 Informasi Lokasi
+      </div>
+      <div class="drawer-actions">
+        <button class="drawer-btn" onclick="DrawerManager.toggle()" title="Minimize">−</button>
+        <button class="drawer-btn" onclick="DrawerManager.close()" title="Tutup">✕</button>
+      </div>
+    </div>
+
+    <!-- Body (scrollable content) -->
+    <div class="drawer-body" id="drawer-body">
+      <div class="drawer-loading">
+        <div class="drawer-spinner"></div>
+        <p>Memuat data...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  
+  <!-- Custom JS (urutan penting!) -->
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/popup.js"></script>
+  <script src="js/drawer.js"></script>
+  <script src="js/upload.js"></script>   
+  <script src="js/layers.js"></script>
+  <script src="js/controls.js"></script>
+  <script src="js/map.js"></script>
+
+</body>
+</html>

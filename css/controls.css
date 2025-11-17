@@ -1,0 +1,484 @@
+/* Layer Control */
+.custom-layer-control {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.layer-control-header {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.layer-control-header:active {
+  background: linear-gradient(135deg, #5568d3 0%, #6a4091 100%);
+}
+
+.layer-control-header .toggle-icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.layer-control-header .toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.layer-control-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0;
+}
+
+.layer-control-body.expanded {
+  max-height: 600px;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.layer-item {
+  margin: 8px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.layer-item.active {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.layer-item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.layer-checkbox {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.layer-name {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+.layer-item.active .layer-name {
+  color: #667eea;
+}
+
+.layer-opacity {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #ddd;
+  display: none;
+}
+
+.layer-item.active .layer-opacity {
+  display: block;
+}
+
+.opacity-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.opacity-slider-container label {
+  font-size: 10px;
+  color: #666;
+  min-width: 15px;
+}
+
+.opacity-slider-container input[type="range"] {
+  flex: 1;
+  height: 25px;
+}
+
+.opacity-slider-container .opacity-value {
+  font-size: 10px;
+  font-weight: bold;
+  color: #667eea;
+  min-width: 15px;
+  text-align: right;
+}
+
+/* Basemap Control */
+.basemap-control {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.basemap-control-header {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.basemap-control-header:active {
+  background: linear-gradient(135deg, #e082ea 0%, #e4465b 100%);
+}
+
+.basemap-control-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 0;
+}
+
+.basemap-control-body.expanded {
+  max-height: 200px;
+  padding: 10px;
+}
+
+.basemap-item {
+  padding: 8px;
+  margin: 4px 0;
+  background: #f9f9f9;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+
+.basemap-item:active {
+  background: #e0e0e0;
+}
+
+.basemap-item.active {
+  border-color: #f093fb;
+  background: #fff0f9;
+}
+
+.basemap-item input[type="radio"] {
+  width: 18px;
+  height: 18px;
+}
+
+.basemap-item label {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  cursor: pointer;
+}
+
+/* Geolocation Button */
+.leaflet-control-locate {
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  cursor: pointer;
+}
+
+.leaflet-control-locate a {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.leaflet-control-locate a:hover {
+  background: #f4f4f4;
+  color: #667eea;
+}
+
+.leaflet-control-locate a:active {
+  background: #e0e0e0;
+}
+
+.leaflet-control-locate a.loading {
+  animation: pulse 1.5s infinite;
+}
+
+.leaflet-control-locate a.active {
+  color: #4caf50;
+}
+
+/* Location Modal */
+.location-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.location-modal.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.location-modal-content {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 90%;
+  width: 350px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.location-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.location-modal-icon {
+  font-size: 48px;
+}
+
+.location-modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.location-modal-body {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.location-modal-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.location-modal-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.location-modal-btn.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.location-modal-btn.primary:active {
+  transform: scale(0.95);
+  opacity: 0.8;
+}
+
+.location-modal-btn.secondary {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.location-modal-btn.secondary:active {
+  background: #e0e0e0;
+}
+
+/* Legend */
+.legend-wms {
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.legend-wms h4 {
+  margin: 5px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 3px;
+}
+
+.legend-wms img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 150px;
+}
+
+/* Info Box */
+.info-box {
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  font-size: 10px;
+  max-width: 200px;
+}
+
+.info-box strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 3px;
+}
+
+.info-item {
+  margin: 3px 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .custom-layer-control, .basemap-control {
+    max-width: calc(70vw - 80px);
+  }
+
+  .layer-control-body.expanded {
+    max-height: 400px;
+  }
+}
+/* Layer Control Header */
+.layer-control-header,
+.basemap-control-header {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layer-control-body,
+.basemap-control-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.layer-control-body.expanded,
+.basemap-control-body.expanded {
+  max-height: 600px;
+  padding: 10px;
+}
+
+.layer-item {
+  margin: 8px 0;
+  padding: 10px;
+  background: #f9f9f9;
+  border-radius: 6px;
+  border: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.layer-item.active {
+  border-color: #667eea;
+  background: #f0f4ff;
+}
+
+.toggle-icon {
+  transition: transform 0.3s;
+}
+
+.toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Info box */
+.info-box {
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  font-size: 10px;
+  max-width: 200px;
+}
+
+.info-item {
+  margin: 3px 0;
+  line-height: 1.4;
+}
+
+/* Legend */
+.legend-wms {
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.legend-wms h4 {
+  margin: 5px 0;
+  font-size: 11px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 3px;
+}
+
+.legend-wms img {
+  display: block;
+  max-width: 150px;
+}
